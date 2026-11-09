@@ -1,0 +1,403 @@
+/* ---------------------------------------------------------------
+   Help & support page. Uses the same tokens as dashboard.css.
+   --------------------------------------------------------------- */
+
+.help-page {
+  min-height: 100vh;
+  font-family: var(--font-ui);
+  color: var(--ink-800);
+  background:
+    radial-gradient(60% 40% at 90% 0%, rgba(240, 206, 193, 0.55), transparent 70%),
+    var(--cream-50);
+
+  /* Local surface tokens so dark mode only needs to override these. */
+  --help-card: rgba(255, 255, 255, 0.92);
+  --help-card-border: rgba(124, 95, 114, 0.12);
+  --help-field: #fff;
+  --help-field-border: rgba(124, 95, 114, 0.25);
+  --help-soft: var(--cream-100);
+}
+
+.help-wrap {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: var(--space-6) clamp(18px, 3.2vw, 36px) var(--space-8);
+}
+
+.help-page h1,
+.help-page h2,
+.help-page h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  color: var(--ink-900);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.help-page p {
+  margin: 0;
+}
+
+.help-page button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.help-page :focus-visible {
+  outline: 2px solid var(--clay-500);
+  outline-offset: 2px;
+}
+
+.help-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- header ---------- */
+.help-header {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-3);
+}
+
+.help-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: var(--r-pill);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-600);
+  background: var(--help-card);
+  border: 1.5px solid var(--help-card-border);
+  transition: color var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
+}
+
+.help-back:hover {
+  color: var(--clay-600);
+  box-shadow: var(--shadow-sm);
+}
+
+.help-badge {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-top: var(--space-3);
+  border-radius: 16px;
+  color: #33202f;
+  background: linear-gradient(120deg, #f8d9b6, #eaa48e);
+}
+
+.help-header h1 {
+  font-size: clamp(1.8rem, 3.4vw, 2.5rem);
+}
+
+.help-header p {
+  max-width: 52ch;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--ink-500);
+}
+
+/* ---------- urgent notice ---------- */
+.help-urgent {
+  display: flex;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+  padding: var(--space-5);
+  border-radius: var(--r-lg);
+  background: linear-gradient(120deg, #fff6e6, #fde9d6);
+  border: 1px solid rgba(224, 169, 109, 0.45);
+  color: var(--clay-600);
+}
+
+.help-urgent > svg {
+  flex: none;
+  margin-top: 2px;
+}
+
+.help-urgent strong {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--ink-900);
+}
+
+.help-urgent p {
+  margin-top: 4px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink-600);
+}
+
+/* ---------- sections ---------- */
+.help-section {
+  margin-top: var(--space-7);
+}
+
+.help-section-head {
+  margin-bottom: var(--space-4);
+}
+
+.help-section-head h2 {
+  font-size: 1.3rem;
+}
+
+/* search */
+.help-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 46px;
+  padding: 0 16px;
+  border-radius: var(--r-pill);
+  color: var(--ink-400);
+  background: var(--help-card);
+  border: 1.5px solid var(--help-card-border);
+  transition: border-color var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
+}
+
+.help-search:focus-within {
+  border-color: rgba(207, 111, 88, 0.5);
+  box-shadow: 0 0 0 4px rgba(207, 111, 88, 0.12);
+}
+
+.help-search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 13.5px;
+  color: var(--ink-800);
+}
+
+.help-search-clear {
+  display: grid;
+  place-items: center;
+  padding: 5px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  opacity: 0.65;
+}
+
+.help-search-clear:hover {
+  opacity: 1;
+}
+
+/* FAQ */
+.help-group {
+  margin-top: var(--space-5);
+}
+
+.help-group h3 {
+  margin-bottom: var(--space-3);
+  font-size: 1rem;
+  color: var(--clay-600);
+}
+
+.help-item {
+  border-radius: var(--r-md);
+  background: var(--help-card);
+  border: 1px solid var(--help-card-border);
+  box-shadow: var(--shadow-xs);
+}
+
+.help-item + .help-item {
+  margin-top: var(--space-2);
+}
+
+.help-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 15px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-800);
+  list-style: none;
+  cursor: pointer;
+}
+
+.help-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.help-item summary svg {
+  flex: none;
+  color: var(--ink-400);
+  transition: transform var(--dur-2) var(--ease);
+}
+
+.help-item[open] summary svg {
+  transform: rotate(180deg);
+}
+
+.help-item p {
+  padding: 0 18px 16px;
+  max-width: 68ch;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--ink-500);
+}
+
+.help-empty {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  margin-top: var(--space-5);
+  padding: var(--space-6);
+  text-align: center;
+  border-radius: var(--r-md);
+  border: 1.5px dashed rgba(124, 95, 114, 0.25);
+}
+
+.help-empty small {
+  font-size: 12.5px;
+  color: var(--ink-500);
+}
+
+/* ---------- contact ---------- */
+.help-card {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-6);
+  border-radius: var(--r-xl);
+  background: var(--help-card);
+  border: 1px solid var(--help-card-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.help-card-intro {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: var(--space-2);
+  padding: 11px 14px;
+  border-radius: var(--r-sm);
+  font-size: 12.8px;
+  color: var(--ink-600);
+  background: var(--help-soft);
+}
+
+.help-card-intro svg {
+  flex: none;
+  color: var(--clay-500);
+}
+
+.help-card label {
+  margin-top: var(--space-3);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-800);
+}
+
+.help-optional {
+  font-weight: 400;
+  color: var(--ink-400);
+}
+
+.help-card select,
+.help-card input,
+.help-card textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  border: 1.5px solid var(--help-field-border);
+  background: var(--help-field);
+  color: var(--ink-800);
+  font: inherit;
+  font-size: 13.5px;
+}
+
+.help-card textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.help-card select:focus,
+.help-card input:focus,
+.help-card textarea:focus {
+  outline: none;
+  border-color: rgba(207, 111, 88, 0.55);
+  box-shadow: 0 0 0 4px rgba(207, 111, 88, 0.12);
+}
+
+.help-count {
+  justify-self: end;
+  font-size: 11.5px;
+  color: var(--ink-400);
+}
+
+.help-error {
+  font-size: 13px;
+  color: var(--danger);
+}
+
+.help-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-3);
+}
+
+.help-footnote {
+  margin-top: var(--space-7);
+  padding-top: var(--space-5);
+  border-top: 1px solid rgba(124, 95, 114, 0.14);
+  font-size: 12px;
+  color: var(--ink-400);
+}
+
+/* ---------- small screens ---------- */
+@media (max-width: 560px) {
+  .help-urgent {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .help-card {
+    padding: var(--space-5);
+  }
+
+  .help-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ---------- dark mode ----------
+   Adjust the selector to match how dark.css marks the dark theme
+   (for example [data-theme="dark"] or .theme-dark). */
+[data-theme="dark"] .help-page {
+  --help-card: rgba(255, 255, 255, 0.06);
+  --help-card-border: rgba(255, 255, 255, 0.12);
+  --help-field: rgba(255, 255, 255, 0.06);
+  --help-field-border: rgba(255, 255, 255, 0.2);
+  --help-soft: rgba(255, 255, 255, 0.07);
+}
+
+[data-theme="dark"] .help-urgent {
+  background: rgba(224, 169, 109, 0.12);
+  border-color: rgba(224, 169, 109, 0.35);
+}
+
+[data-theme="dark"] .help-badge {
+  color: #33202f;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .help-item summary svg {
+    transition: none;
+  }
+}

@@ -1,0 +1,147 @@
+/* Find a doctor page. Pure CSS only: no JavaScript in this file. */
+
+.doc-wide { max-width: 980px; }
+
+.doc-emergency {
+  margin: 0 0 18px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: #fdeceb;
+  color: #7a2f3d;
+  font-size: 14px;
+}
+
+/* Search form */
+.doc-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.doc-field {
+  flex: 1 1 280px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  padding: 0 18px;
+  background: #fff;
+  border: 1px solid #efe0dc;
+  border-radius: 999px;
+  color: #7a6670;
+}
+.doc-field input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: inherit;
+  color: #2b1420;
+}
+.doc-field:focus-within { outline: 3px solid #c0506a; outline-offset: 2px; }
+.doc-form .btn { height: 48px; padding: 0 22px; border-radius: 999px; cursor: pointer; font-weight: 600; }
+.doc-locate { display: inline-flex; align-items: center; gap: 8px; }
+
+/* Status text */
+.doc-notice { margin: 0 0 12px; padding: 10px 14px; border-radius: 12px; background: #fff4e0; color: #7a5a1e; font-size: 14px; }
+.doc-count  { margin: 18px 4px 10px; color: #7a6670; font-size: 14px; }
+.doc-empty  { margin: 6px 4px 18px; color: #7a6670; }
+
+/* Map */
+.doc-map-wrap { margin-bottom: 18px; }
+.doc-map {
+  height: 420px;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid #efe0dc;
+  z-index: 0;
+}
+.doc-pin span {
+  display: block;
+  position: relative;
+  width: 30px;
+  height: 30px;
+  background: #c0506a;
+  border: 3px solid #fff;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  box-shadow: 0 3px 8px rgba(43, 20, 32, 0.35);
+}
+.doc-pin span::after {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  background: #fff;
+  border-radius: 50%;
+}
+.doc-pop { display: flex; flex-direction: column; gap: 2px; }
+.doc-pop strong { color: #2b1420; font-size: 14px; }
+.doc-pop span { color: #7a6670; font-size: 12px; }
+
+/* Result cards */
+.doc-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+.doc-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #efe0dc;
+  border-radius: 22px;
+}
+.doc-top { display: flex; align-items: flex-start; gap: 12px; }
+.doc-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #dcebdc;
+  color: #2f4b31;
+}
+.doc-title { flex: 1; min-width: 0; }
+.doc-title h2 { margin: 0; font-size: 18px; line-height: 1.25; color: #2b1420; }
+.doc-title p { margin: 2px 0 0; font-size: 13px; color: #7a6670; }
+.doc-dist {
+  flex: none;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #f7d9d6;
+  color: #7a2f3d;
+  font-size: 12px;
+  font-weight: 600;
+}
+.doc-addr { display: flex; gap: 6px; align-items: flex-start; margin: 0; font-size: 14px; color: #7a6670; line-height: 1.45; }
+.doc-addr svg { flex: none; margin-top: 3px; }
+
+.doc-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+.doc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 14px;
+  border: 1px solid #efe0dc;
+  border-radius: 999px;
+  background: #fff;
+  color: #2b1420;
+  font: 600 13px/1 inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+.doc-btn.is-main { background: #2b1420; border-color: #2b1420; color: #fff; }
+.doc-btn:focus-visible { outline: 3px solid #c0506a; outline-offset: 2px; }
+
+/* Footer notes */
+.doc-note { margin: 18px 4px 0; font-size: 13px; color: #7a6670; line-height: 1.5; }
+
+@media (max-width: 520px) {
+  .doc-map { height: 320px; }
+  .doc-list { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,13 @@
+/* Buttons that lead from a checker result to Find a doctor. */
+.urgent-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.urgent-btn {
+  flex: 1 1 210px;
+  justify-content: center;
+  text-decoration: none;
+}

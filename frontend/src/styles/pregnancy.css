@@ -1,0 +1,14 @@
+/* Pregnancy checker: everything else reuses pcos.css.
+   Only adds option rows with 2 or 3 columns (set per question with --cols). */
+
+.pcos-choice.preg-choice {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 560px) {
+  .pcos-choice.preg-choice {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FFF8F2" />
+    <meta
+      name="description"
+      content="Femora - a warmer, calmer way to understand your cycle and your wellbeing."
+    />
+    <title>Femora | Your health, understood.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..800;1,9..144,400..700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .boot-splash {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(120% 120% at 15% 10%, #fdece1 0%, #fff8f2 45%, #f7ece2 100%);
+        font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+        transition: opacity 420ms ease;
+      }
+      .boot-splash-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+      }
+      .boot-mark {
+        width: 62px;
+        height: 62px;
+        border-radius: 20px;
+        display: grid;
+        place-items: center;
+        color: #fff6f0;
+        font-family: "Fraunces", Georgia, serif;
+        font-size: 30px;
+        font-weight: 600;
+        background: linear-gradient(135deg, #e8a28c, #b85742);
+        box-shadow: 0 18px 40px -18px rgba(184, 87, 66, 0.65);
+        animation: boot-pulse 1.6s ease-in-out infinite;
+      }
+      .boot-text {
+        letter-spacing: 0.34em;
+        text-transform: uppercase;
+        font-size: 11px;
+        font-weight: 600;
+        color: #a9776c;
+      }
+      @keyframes boot-pulse {
+        0%, 100% { transform: translateY(0) scale(1); }
+        50% { transform: translateY(-6px) scale(1.04); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .boot-mark { animation: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <div class="boot-splash">
+        <div class="boot-splash-inner">
+          <div class="boot-mark">F</div>
+          <div class="boot-text">femora</div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

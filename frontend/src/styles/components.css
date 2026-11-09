@@ -1,0 +1,284 @@
+/* ---------------------------------------------------------------
+   Shared building blocks: cards, buttons, badges, toast, skeleton
+   --------------------------------------------------------------- */
+.card {
+  position: relative;
+  border-radius: var(--r-lg);
+  background: rgba(255, 255, 255, 0.84);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(14px);
+}
+
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.card-title {
+  font-size: 1.12rem;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 12px;
+  font-family: var(--font-ui);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--clay-600);
+}
+
+.eyebrow::before {
+  content: "";
+  width: 22px;
+  height: 1.5px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--clay-500));
+}
+
+.eyebrow-plain::before {
+  display: none;
+}
+
+.muted {
+  color: var(--ink-500);
+}
+
+/* buttons ---------------------------------------------------------------- */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  height: 46px;
+  padding: 0 22px;
+  overflow: hidden;
+  border-radius: var(--r-pill);
+  font-size: 13.5px;
+  font-weight: 600;
+  transition:
+    transform var(--dur-2) var(--ease),
+    box-shadow var(--dur-2) var(--ease),
+    background-color var(--dur-2) var(--ease),
+    color var(--dur-2) var(--ease);
+}
+
+.btn:active {
+  transform: scale(0.975);
+}
+
+.btn-primary {
+  color: #fff;
+  background: var(--grad-warm);
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 30px 60px -26px rgba(168, 70, 47, 0.8);
+}
+
+.btn-ghost {
+  color: var(--ink-600);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1.5px solid rgba(124, 95, 114, 0.14);
+}
+
+.btn-ghost:hover {
+  transform: translateY(-2px);
+  color: var(--clay-600);
+  border-color: rgba(207, 111, 88, 0.4);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-soft {
+  color: var(--clay-700);
+  background: rgba(207, 111, 88, 0.12);
+}
+
+.btn-soft:hover {
+  transform: translateY(-2px);
+  background: rgba(207, 111, 88, 0.18);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.68;
+  transform: none;
+}
+
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  transform: translateX(-140%) skewX(-12deg);
+}
+
+.btn-shine:hover::after {
+  animation: femora-shimmer 900ms var(--ease);
+}
+
+.spinner {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-top-color: #fff;
+  animation: femora-spin 0.7s linear infinite;
+}
+
+/* tiles & badges --------------------------------------------------------- */
+.tile-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 15px;
+  color: #fff;
+  box-shadow: var(--shadow-xs);
+}
+
+.tone-rose {
+  background: linear-gradient(135deg, #efa595, #cf6f58);
+}
+
+.tone-gold {
+  background: linear-gradient(135deg, #f2cf9d, #d99a56);
+}
+
+.tone-sage {
+  background: linear-gradient(135deg, #b9cfb1, #6e8e68);
+}
+
+.tone-plum {
+  background: linear-gradient(135deg, #6d4262, #3b2437);
+}
+
+.tone-clay {
+  background: linear-gradient(135deg, #d98268, #a8462f);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 13px;
+  border-radius: var(--r-pill);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(124, 95, 114, 0.12);
+  color: var(--ink-600);
+}
+
+.pill-success {
+  color: var(--success);
+  background: var(--success-soft);
+  border-color: rgba(78, 127, 99, 0.18);
+}
+
+.pill-warn {
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-color: rgba(176, 74, 60, 0.18);
+}
+
+/* skeleton & toast ------------------------------------------------------- */
+.skeleton {
+  border-radius: 10px;
+  background: linear-gradient(90deg, #f4e5da 25%, #fdf3ec 37%, #f4e5da 63%);
+  background-size: 400% 100%;
+  animation: femora-sheen 1.5s var(--ease-soft) infinite;
+}
+
+.toast {
+  position: fixed;
+  right: 26px;
+  bottom: 26px;
+  z-index: 80;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: min(360px, calc(100vw - 40px));
+  padding: 15px 18px;
+  border-radius: var(--r-md);
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-lg);
+  animation: femora-slide-in-right var(--dur-3) var(--ease) both;
+}
+
+.toast strong {
+  display: block;
+  font-size: 13.5px;
+}
+
+.toast p {
+  font-size: 12.5px;
+  color: var(--ink-500);
+}
+
+.toast-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  color: #fff;
+}
+
+.toast-good .toast-icon {
+  background: linear-gradient(135deg, #a9c7a0, #6e8e68);
+}
+
+.toast-info .toast-icon {
+  background: var(--grad-warm);
+}
+
+.toast-close {
+  margin-left: auto;
+  color: var(--ink-300);
+  transition: color var(--dur-1) var(--ease);
+}
+
+.toast-close:hover {
+  color: var(--clay-600);
+}
+
+/* button micro-interactions ---------------------------------------------- */
+.btn-label {
+  transition: letter-spacing var(--dur-2) var(--ease);
+}
+
+.btn-arrow {
+  display: inline-flex;
+  transition: transform var(--dur-2) var(--ease);
+}
+
+.btn:hover .btn-label {
+  letter-spacing: 0.02em;
+}
+
+.btn:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+.btn-ghost:hover .btn-arrow {
+  transform: translate(3px, -3px);
+}

@@ -1,0 +1,440 @@
+/* ================================================================
+   Back Pain Checker
+   Mirrors pcos.css / pregnancy.css / general.css exactly.
+   Uses the same Femora design tokens (tokens.css must be loaded).
+   ================================================================ */
+
+/* ── page shell ──────────────────────────────────────────────── */
+.bp-page {
+  min-height: 100vh;
+  font-family: var(--font-ui);
+  color: var(--ink-800);
+  background:
+    radial-gradient(60% 40% at 90% 0%, rgba(240, 206, 193, 0.55), transparent 70%),
+    var(--cream-50);
+}
+
+/* reuse pcos-wrap width / spacing */
+.bp-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--space-6) clamp(18px, 4vw, 32px) var(--space-8);
+  box-sizing: border-box;
+}
+
+/* ── typography resets ───────────────────────────────────────── */
+.bp-page h1,
+.bp-page h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--ink-900);
+}
+
+.bp-page p {
+  margin: 0;
+}
+
+.bp-page button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.bp-page button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.bp-page :focus-visible {
+  outline: 2px solid var(--clay-500);
+  outline-offset: 2px;
+}
+
+/* ── back button — identical to .pcos-back ───────────────────── */
+.bp-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: var(--space-5);
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-600);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid rgba(124, 95, 114, 0.14);
+  border-radius: 12px;
+  transition: color var(--dur-2) var(--ease), transform var(--dur-2) var(--ease);
+}
+
+.bp-back:hover {
+  color: var(--clay-600);
+  transform: translateX(-3px);
+}
+
+/* ── page heading — identical to .pcos-head ─────────────────── */
+.bp-head h1 {
+  font-size: clamp(2rem, 5vw, 2.8rem);
+}
+
+.bp-head p {
+  max-width: 52ch;
+  margin-top: var(--space-2);
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--ink-500);
+}
+
+/* ── card — identical to .pcos-card ─────────────────────────── */
+.bp-card {
+  margin-top: var(--space-5);
+  padding: clamp(20px, 4vw, 36px);
+  border-radius: var(--r-xl);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(124, 95, 114, 0.09);
+  box-shadow: var(--shadow-md);
+}
+
+.bp-card h1 {
+  font-size: clamp(1.3rem, 3.5vw, 1.7rem);
+  margin-bottom: var(--space-2);
+}
+
+/* ── step label — matches .pcos-hint / small labels ─────────── */
+.bp-step {
+  margin-top: var(--space-1) !important;
+  font-size: 13px;
+  color: var(--ink-500);
+}
+
+.bp-sub {
+  margin-top: 4px !important;
+  font-size: 13.5px;
+  color: var(--ink-500);
+}
+
+/* ── progress bar — matches .pcos-progress dots style ───────── */
+.bp-progress {
+  display: flex;
+  gap: 6px;
+  margin-bottom: var(--space-5);
+}
+
+/* single continuous bar variant */
+.bp-progress-bar {
+  height: 6px;
+  border-radius: var(--r-pill);
+  background: rgba(124, 95, 114, 0.14);
+  overflow: hidden;
+  margin-bottom: var(--space-5);
+}
+
+.bp-progress-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(120deg, #f8d9b6, #eaa48e);
+  transition: width var(--dur-3) var(--ease);
+}
+
+/* ── option buttons — mirrors .pcos-flags buttons ───────────── */
+.bp-options {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+}
+
+.bp-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  color: var(--ink-700, var(--ink-600));
+  background: var(--cream-100);
+  border: 1.5px solid rgba(124, 95, 114, 0.18);
+  border-radius: var(--r-md);
+  transition:
+    border-color var(--dur-2) var(--ease),
+    background-color var(--dur-2) var(--ease);
+}
+
+.bp-option:hover {
+  border-color: rgba(207, 111, 88, 0.5);
+  background: #fde9de;
+}
+
+.bp-option.is-selected {
+  border-color: rgba(207, 111, 88, 0.6);
+  background: #fde9de;
+  color: var(--ink-900);
+}
+
+/* checkbox variant (red-flags step) — matches .pcos-box */
+.bp-check {
+  cursor: pointer;
+}
+
+.bp-check input {
+  display: none;
+}
+
+.bp-box {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 1.5px solid rgba(124, 95, 114, 0.4);
+  background: #fff;
+  color: var(--clay-600);
+}
+
+/* ── primary & ghost buttons — matches .btn from pcos.css ───── */
+.bp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: var(--r-pill);
+  border: 0;
+  transition:
+    opacity var(--dur-1) var(--ease),
+    transform var(--dur-2) var(--ease);
+  background: linear-gradient(120deg, var(--clay-500), var(--clay-700));
+  color: #fff;
+}
+
+.bp-btn:hover:not(:disabled) {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.bp-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ghost / secondary — white pill */
+.bp-ghost {
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--ink-700);
+  border: 1.5px solid rgba(124, 95, 114, 0.18);
+}
+
+.bp-ghost:hover:not(:disabled) {
+  background: #fff;
+  border-color: rgba(207, 111, 88, 0.45);
+}
+
+/* ── actions row — matches .pcos-actions ────────────────────── */
+.bp-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  flex-wrap: wrap;
+}
+
+/* ── result card — mirrors .pcos-result ─────────────────────── */
+.bp-result {
+  --tone: var(--sage-600);
+}
+
+.bp-result.is-urgent {
+  --tone: var(--danger);
+  border-color: rgba(176, 74, 60, 0.35);
+  background: var(--danger-soft);
+}
+
+/* result level badge — mirrors .pcos-result-label */
+.bp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--tone);
+}
+
+.bp-message {
+  margin-top: var(--space-4) !important;
+  max-width: 54ch;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink-700, var(--ink-600));
+}
+
+/* tips list — mirrors .pcos-steps */
+.bp-tips {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bp-tips li {
+  display: flex;
+  gap: 10px;
+  padding: 11px 14px;
+  font-size: 14px;
+  line-height: 1.5;
+  border-radius: var(--r-md);
+  background: var(--cream-100);
+  color: var(--ink-700, var(--ink-600));
+}
+
+/* disclaimer footnote — mirrors .pcos-foot */
+.bp-note {
+  margin-top: var(--space-4) !important;
+  font-size: 12px;
+  color: var(--ink-400);
+}
+
+/* ── error state — mirrors .pcos-error ──────────────────────── */
+.bp-error {
+  margin-top: var(--space-4) !important;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-radius: var(--r-md);
+}
+
+/* ── past history — mirrors .pcos-past ──────────────────────── */
+.bp-past {
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid rgba(124, 95, 114, 0.14);
+}
+
+.bp-past > p {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink-500);
+}
+
+.bp-past ul {
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bp-past li {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 13px;
+  color: var(--ink-500);
+}
+
+.bp-past strong {
+  color: var(--ink-800);
+  font-weight: 600;
+}
+
+/* ── responsive ──────────────────────────────────────────────── */
+@media (max-width: 520px) {
+  .bp-actions {
+    flex-direction: column-reverse;
+  }
+
+  .bp-actions .bp-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+.bp-message {
+  margin-top: var(--space-4) !important;
+  max-width: 54ch;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink-700, var(--ink-600));
+}
+
+/* tips list — mirrors .pcos-steps */
+.bp-tips {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bp-tips li {
+  display: flex;
+  gap: 10px;
+  padding: 11px 14px;
+  font-size: 14px;
+  line-height: 1.5;
+  border-radius: var(--r-md);
+  background: var(--cream-100);
+  color: var(--ink-700, var(--ink-600));
+}
+
+/* disclaimer footnote — mirrors .pcos-foot */
+.bp-note {
+  margin-top: var(--space-4) !important;
+  font-size: 12px;
+  color: var(--ink-400);
+}
+
+/* ── error state — mirrors .pcos-error ──────────────────────── */
+.bp-error {
+  margin-top: var(--space-4) !important;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-radius: var(--r-md);
+}
+
+/* ── past history — mirrors .pcos-past ──────────────────────── */
+.bp-past {
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid rgba(124, 95, 114, 0.14);
+}
+
+.bp-past > p {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink-500);
+}
+
+.bp-past ul {
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bp-past li {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 13px;
+  color: var(--ink-500);
+}
+
+.bp-past strong {
+  color: var(--ink-800);
+  font-weight: 600;
+}
+
+/* ── responsive ──────────────────────────────────────────────── */
+@media (max-width: 520px) {
+  .bp-actions {
+    flex-direction: column-reverse;
+  }
+
+  .bp-actions .bp-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

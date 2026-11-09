@@ -1,0 +1,394 @@
+/* PCOS checker. Uses the same tokens as dashboard.css. */
+.pcos-page {
+  min-height: 100vh;
+  font-family: var(--font-ui);
+  color: var(--ink-800);
+  background:
+    radial-gradient(60% 40% at 90% 0%, rgba(240, 206, 193, 0.55), transparent 70%),
+    var(--cream-50);
+}
+
+.pcos-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--space-6) clamp(18px, 4vw, 32px) var(--space-8);
+  box-sizing: border-box;
+}
+
+.pcos-page h1,
+.pcos-page h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--ink-900);
+}
+
+.pcos-page p {
+  margin: 0;
+}
+
+.pcos-page button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.pcos-page button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pcos-page :focus-visible {
+  outline: 2px solid var(--clay-500);
+  outline-offset: 2px;
+}
+
+.pcos-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: var(--space-5);
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-600);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid rgba(124, 95, 114, 0.14);
+  border-radius: 12px;
+  transition: color var(--dur-2) var(--ease), transform var(--dur-2) var(--ease);
+}
+
+.pcos-back:hover {
+  color: var(--clay-600);
+  transform: translateX(-3px);
+}
+
+.pcos-head h1 {
+  font-size: clamp(2rem, 5vw, 2.8rem);
+}
+
+.pcos-head p {
+  max-width: 52ch;
+  margin-top: var(--space-2);
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--ink-500);
+}
+
+.pcos-card {
+  margin-top: var(--space-5);
+  padding: clamp(20px, 4vw, 36px);
+  border-radius: var(--r-xl);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(124, 95, 114, 0.09);
+  box-shadow: var(--shadow-md);
+}
+
+.pcos-card h2 {
+  font-size: 1.5rem;
+}
+
+.pcos-hint {
+  margin-top: 4px !important;
+  font-size: 13px;
+  color: var(--ink-500);
+}
+
+/* progress */
+.pcos-progress {
+  display: flex;
+  gap: 6px;
+  margin-bottom: var(--space-5);
+}
+
+.pcos-prog {
+  flex: 1;
+  display: grid;
+  gap: 7px;
+}
+
+.pcos-prog::before {
+  content: "";
+  height: 6px;
+  border-radius: var(--r-pill);
+  background: rgba(124, 95, 114, 0.14);
+}
+
+.pcos-prog.is-done::before,
+.pcos-prog.is-now::before {
+  background: linear-gradient(120deg, #f8d9b6, #eaa48e);
+}
+
+.pcos-prog-dot {
+  display: none;
+}
+
+.pcos-prog small {
+  font-size: 12px;
+  color: var(--ink-400);
+}
+
+.pcos-prog.is-now small {
+  font-weight: 700;
+  color: var(--ink-900);
+}
+
+/* fields */
+.pcos-fields {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+}
+
+.pcos-field {
+  display: grid;
+  gap: 8px;
+}
+
+.pcos-field label {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-800);
+}
+
+.pcos-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 46px;
+  padding: 0 14px;
+  border-radius: var(--r-md);
+  background: var(--cream-100);
+  border: 1.5px solid rgba(124, 95, 114, 0.18);
+  transition: border-color var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
+}
+
+.pcos-input:focus-within {
+  border-color: rgba(207, 111, 88, 0.55);
+  box-shadow: 0 0 0 4px rgba(207, 111, 88, 0.12);
+}
+
+.pcos-input input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 15px;
+  color: var(--ink-900);
+}
+
+.pcos-input span {
+  font-size: 12.5px;
+  color: var(--ink-400);
+}
+
+.pcos-choice {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.pcos-choice button {
+  flex: 1;
+  height: 44px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-600);
+  background: var(--cream-100);
+  border: 1.5px solid rgba(124, 95, 114, 0.18);
+  border-radius: var(--r-md);
+  transition: background-color var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease);
+}
+
+.pcos-choice button:hover {
+  border-color: rgba(207, 111, 88, 0.5);
+}
+
+.pcos-choice button.is-picked {
+  color: #33202f;
+  border-color: transparent;
+  background: linear-gradient(120deg, #f8d9b6, #eaa48e);
+}
+
+.pcos-error {
+  margin-top: var(--space-4) !important;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-radius: var(--r-md);
+}
+
+.pcos-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+/* result */
+.pcos-result {
+  --tone: var(--sage-600);
+}
+
+.pcos-result.is-mid {
+  --tone: #c98a2e;
+}
+
+.pcos-result.is-high {
+  --tone: var(--clay-600);
+}
+
+.pcos-result-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-500);
+}
+
+.pcos-result h2 {
+  margin-top: 4px;
+  font-size: clamp(2.4rem, 7vw, 3.4rem);
+  color: var(--tone);
+}
+
+.pcos-gauge {
+  height: 10px;
+  margin-top: var(--space-4);
+  overflow: hidden;
+  border-radius: var(--r-pill);
+  background: rgba(124, 95, 114, 0.12);
+}
+
+.pcos-gauge span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--tone);
+}
+
+.pcos-score {
+  margin-top: 8px !important;
+  font-size: 12.5px;
+  color: var(--ink-400);
+}
+
+.pcos-result-text {
+  margin-top: var(--space-4) !important;
+  max-width: 54ch;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink-700, var(--ink-600));
+}
+
+.pcos-note {
+  margin-top: var(--space-4) !important;
+  padding: 12px 14px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--ink-600);
+  background: var(--cream-100);
+  border-radius: var(--r-md);
+}
+
+.pcos-foot {
+  margin-top: var(--space-6) !important;
+  font-size: 12px;
+  color: var(--ink-400);
+}
+
+@media (max-width: 520px) {
+  .pcos-actions {
+    flex-direction: column-reverse;
+  }
+
+  .pcos-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ---- additions for the real backend contract ---- */
+.pcos-result.is-low { --tone: var(--sage-600); }
+.pcos-result.is-neutral { --tone: var(--ink-500); }
+.pcos-result.is-urgent { --tone: var(--danger); }
+.pcos-result.is-urgent { border-color: rgba(176, 74, 60, 0.35); background: var(--danger-soft); }
+
+.pcos-result-label { display: flex; align-items: center; gap: 6px; color: var(--tone); font-weight: 700; }
+.pcos-result h2 { font-size: clamp(1.5rem, 4.5vw, 2rem); color: var(--ink-900); }
+
+.pcos-steps { display: grid; gap: var(--space-2); margin: var(--space-4) 0 0; padding: 0; list-style: none; }
+.pcos-steps li { display: flex; gap: 10px; padding: 11px 14px; font-size: 14px; line-height: 1.5; border-radius: var(--r-md); background: var(--cream-100); color: var(--ink-700, var(--ink-600)); }
+.pcos-steps svg { flex: none; margin-top: 3px; color: var(--tone); }
+
+.pcos-q { font-size: 13.5px; font-weight: 600; color: var(--ink-800); }
+
+.pcos-flags { display: grid; gap: var(--space-2); margin-top: var(--space-5); }
+.pcos-flags button { display: flex; align-items: center; gap: 12px; padding: 13px 14px; font-size: 14px; text-align: left; color: var(--ink-700, var(--ink-600)); background: var(--cream-100); border: 1.5px solid rgba(124, 95, 114, 0.18); border-radius: var(--r-md); }
+.pcos-flags button.is-picked { border-color: rgba(207, 111, 88, 0.6); background: #fde9de; color: var(--ink-900); }
+.pcos-box { display: grid; place-items: center; flex: none; width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid rgba(124, 95, 114, 0.4); background: #fff; color: var(--clay-600); }
+
+.pcos-past { margin-top: var(--space-5); padding-top: var(--space-4); border-top: 1px solid rgba(124, 95, 114, 0.14); }
+.pcos-past > p { font-size: 12.5px; font-weight: 700; color: var(--ink-500); }
+.pcos-past ul { margin: var(--space-2) 0 0; padding: 0; list-style: none; }
+.pcos-past li { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; color: var(--ink-500); }
+.pcos-past strong { color: var(--ink-800); font-weight: 600; }
+
+/* ---- dashboard symptom checker card: rows and CTA are real buttons ---- */
+.bento-feature button.bento-row {
+  width: 100%;
+  border: 0;
+  color: inherit;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color var(--dur-2) var(--ease);
+}
+
+.bento-feature button.bento-row:hover {
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.bento-feature button.bento-cta {
+  border: 0;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* ---- dashboard "What would you like to check?" picker ---- */
+.dash-pick-list {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.dash-pick-list button {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  padding: 13px 14px;
+  font-family: inherit;
+  font-size: 14px;
+  text-align: left;
+  color: var(--ink-800);
+  background: var(--cream-100);
+  border: 1.5px solid rgba(124, 95, 114, 0.18);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: border-color var(--dur-2) var(--ease), background-color var(--dur-2) var(--ease);
+}
+
+.dash-pick-list button:hover {
+  border-color: rgba(207, 111, 88, 0.6);
+  background: #fde9de;
+}
+
+.dash-pick-list b {
+  font-weight: 700;
+}
+
+.dash-pick-list small {
+  font-size: 12px;
+  color: var(--ink-500);
+}

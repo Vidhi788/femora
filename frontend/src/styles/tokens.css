@@ -1,0 +1,241 @@
+/* ---------------------------------------------------------------
+   Femora design tokens - warm clay, blush, plum and sage
+   --------------------------------------------------------------- */
+:root {
+  /* surfaces */
+  --cream-50: #fffbf8;
+  --cream-100: #fdf4ec;
+  --cream-200: #f9e9dd;
+  --sand-300: #f3ddcd;
+  --blush-400: #f0cec1;
+  --blush-500: #e7b3a2;
+
+  /* accents */
+  --rose-400: #e39b8b;
+  --clay-500: #cf6f58;
+  --clay-600: #b85742;
+  --clay-700: #9c4433;
+  --gold-400: #e0a96d;
+  --sage-400: #9db894;
+  --sage-600: #6e8e68;
+
+  /* ink */
+  --ink-900: #2a1826;
+  --ink-800: #3b2437;
+  --ink-700: #4a2f44;
+  --ink-600: #5a3a50;
+  --ink-500: #7c5f72;
+  --ink-400: #9a8394;
+  --ink-300: #b9a6b0;
+
+  /* semantic */
+  --success: #4e7f63;
+  --success-soft: #e6f0e8;
+  --danger: #b04a3c;
+  --danger-soft: #fbe9e4;
+
+  /* gradients */
+  --grad-warm: linear-gradient(135deg, #eaa48e 0%, #d4735c 55%, #a8462f 100%);
+  --grad-text: linear-gradient(100deg, #cf6f58 0%, #b85742 58%, #a8462f 100%);
+  --grad-hero: radial-gradient(120% 110% at 12% 8%, #fde3d5 0%, #fbdccf 32%, #fff8f2 72%);
+  --grad-plum: linear-gradient(140deg, #462c42 0%, #2b1829 100%);
+  --grad-sage: linear-gradient(135deg, #b9cfb1 0%, #7f9d78 100%);
+  --grad-sun: linear-gradient(135deg, #f6d3a6 0%, #e0a96d 100%);
+
+  /* type */
+  --font-display: "Fraunces", "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-ui: "Plus Jakarta Sans", "DM Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* radius */
+  --r-xs: 10px;
+  --r-sm: 14px;
+  --r-md: 20px;
+  --r-lg: 28px;
+  --r-xl: 38px;
+  --r-pill: 999px;
+
+  /* spacing scale - keep layouts on these steps */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 26px;
+  --space-7: 34px;
+  --space-8: 44px;
+  --space-9: 60px;
+
+  /* elevation */
+  --shadow-xs: 0 4px 14px -10px rgba(58, 32, 52, 0.45);
+  --shadow-sm: 0 14px 30px -22px rgba(58, 32, 52, 0.5);
+  --shadow-md: 0 26px 60px -34px rgba(58, 32, 52, 0.55);
+  --shadow-lg: 0 40px 90px -46px rgba(58, 32, 52, 0.6);
+  --shadow-glow: 0 24px 60px -28px rgba(207, 111, 88, 0.75);
+
+  /* motion */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-1: 160ms;
+  --dur-2: 300ms;
+  --dur-3: 520ms;
+  --dur-4: 900ms;
+}
+
+/* ---------------------------------------------------------------
+   Dark theme - same token names, remapped values
+   --------------------------------------------------------------- */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* surfaces: cream scale becomes deep plum */
+  --cream-50: #1d111b;
+  --cream-100: #261622;
+  --cream-200: #301d2b;
+  --sand-300: #3d2736;
+  --blush-400: #5a3a48;
+  --blush-500: #70483a;
+
+  /* accents: slightly brighter so they stay readable */
+  --rose-400: #eaa595;
+  --clay-500: #e0806a;
+  --clay-600: #eb937e;
+  --clay-700: #f2a794;
+  --gold-400: #e8b57a;
+  --sage-400: #a9c5a0;
+  --sage-600: #8fb086;
+
+  /* ink: scale is inverted, 900 is now the lightest */
+  --ink-900: #fbefe9;
+  --ink-800: #f3e3dc;
+  --ink-700: #e4d0cb;
+  --ink-600: #cdb5b4;
+  --ink-500: #b09aa4;
+  --ink-400: #8f7a87;
+  --ink-300: #6e5a68;
+
+  /* semantic */
+  --success: #7fb494;
+  --success-soft: #1f3128;
+  --danger: #e57a6a;
+  --danger-soft: #3a1f1c;
+
+  /* gradients */
+  --grad-hero: radial-gradient(120% 110% at 12% 8%, #3a2233 0%, #2a1824 40%, #1d111b 80%);
+  --grad-plum: linear-gradient(140deg, #5a3857 0%, #3a2237 100%);
+
+  /* shadows get heavier on dark backgrounds */
+  --shadow-xs: 0 4px 14px -10px rgba(0, 0, 0, 0.7);
+  --shadow-sm: 0 14px 30px -22px rgba(0, 0, 0, 0.75);
+  --shadow-md: 0 26px 60px -34px rgba(0, 0, 0, 0.8);
+  --shadow-lg: 0 40px 90px -46px rgba(0, 0, 0, 0.85);
+}
+
+
+/* ---------------------------------------------------------------
+   Blush theme - soft pink & berry
+   --------------------------------------------------------------- */
+[data-theme="blush"] {
+  color-scheme: light;
+
+  /* surfaces: soft pink tones */
+  --cream-50:  #fff5f8;
+  --cream-100: #fce4ec;
+  --cream-200: #f8bbd0;
+  --sand-300:  #f48fb1;
+  --blush-400: #f06292;
+  --blush-500: #ec407a;
+
+  /* accents: berry/magenta */
+  --rose-400:  #e91e63;
+  --clay-500:  #c2185b;
+  --clay-600:  #ad1457;
+  --clay-700:  #880e4f;
+  --gold-400:  #f06292;
+  --sage-400:  #ce93d8;
+  --sage-600:  #9c27b0;
+
+  /* ink: deep berry tones */
+  --ink-900: #1a0a14;
+  --ink-800: #2d1222;
+  --ink-700: #3d1a30;
+  --ink-600: #5d2d4e;
+  --ink-500: #8e4874;
+  --ink-400: #b07898;
+  --ink-300: #d4adc4;
+
+  /* semantic */
+  --success: #4e7f63;
+  --success-soft: #e6f0e8;
+  --danger: #b04a3c;
+  --danger-soft: #fbe9e4;
+
+  /* gradients */
+  --grad-warm: linear-gradient(135deg, #f48fb1 0%, #e91e63 55%, #880e4f 100%);
+  --grad-text: linear-gradient(100deg, #c2185b 0%, #ad1457 58%, #880e4f 100%);
+  --grad-hero: radial-gradient(120% 110% at 12% 8%, #fce4ec 0%, #f8bbd0 32%, #fff5f8 72%);
+  --grad-plum: linear-gradient(140deg, #880e4f 0%, #4a0e30 100%);
+  --grad-sage: linear-gradient(135deg, #ce93d8 0%, #9c27b0 100%);
+  --grad-sun:  linear-gradient(135deg, #f8bbd0 0%, #f06292 100%);
+
+  /* shadows: pink-tinted */
+  --shadow-xs: 0 4px 14px -10px rgba(136, 14, 79, 0.35);
+  --shadow-sm: 0 14px 30px -22px rgba(136, 14, 79, 0.4);
+  --shadow-md: 0 26px 60px -34px rgba(136, 14, 79, 0.45);
+  --shadow-lg: 0 40px 90px -46px rgba(136, 14, 79, 0.5);
+  --shadow-glow: 0 24px 60px -28px rgba(194, 24, 91, 0.6);
+}
+
+
+/* ---------------------------------------------------------------
+   Blush theme - soft pink & berry
+   --------------------------------------------------------------- */
+[data-theme="blush"] {
+  color-scheme: light;
+
+  /* surfaces: soft pink tones */
+  --cream-50:  #fff5f8;
+  --cream-100: #fce4ec;
+  --cream-200: #f8bbd0;
+  --sand-300:  #f48fb1;
+  --blush-400: #f06292;
+  --blush-500: #ec407a;
+
+  /* accents: berry/magenta */
+  --rose-400:  #e91e63;
+  --clay-500:  #c2185b;
+  --clay-600:  #ad1457;
+  --clay-700:  #880e4f;
+  --gold-400:  #f06292;
+  --sage-400:  #ce93d8;
+  --sage-600:  #9c27b0;
+
+  /* ink: deep berry tones */
+  --ink-900: #1a0a14;
+  --ink-800: #2d1222;
+  --ink-700: #3d1a30;
+  --ink-600: #5d2d4e;
+  --ink-500: #8e4874;
+  --ink-400: #b07898;
+  --ink-300: #d4adc4;
+
+  /* semantic */
+  --success: #4e7f63;
+  --success-soft: #e6f0e8;
+  --danger: #b04a3c;
+  --danger-soft: #fbe9e4;
+
+  /* gradients */
+  --grad-warm: linear-gradient(135deg, #f48fb1 0%, #e91e63 55%, #880e4f 100%);
+  --grad-text: linear-gradient(100deg, #c2185b 0%, #ad1457 58%, #880e4f 100%);
+  --grad-hero: radial-gradient(120% 110% at 12% 8%, #fce4ec 0%, #f8bbd0 32%, #fff5f8 72%);
+  --grad-plum: linear-gradient(140deg, #880e4f 0%, #4a0e30 100%);
+  --grad-sage: linear-gradient(135deg, #ce93d8 0%, #9c27b0 100%);
+  --grad-sun:  linear-gradient(135deg, #f8bbd0 0%, #f06292 100%);
+
+  /* shadows: pink-tinted */
+  --shadow-xs: 0 4px 14px -10px rgba(136, 14, 79, 0.35);
+  --shadow-sm: 0 14px 30px -22px rgba(136, 14, 79, 0.4);
+  --shadow-md: 0 26px 60px -34px rgba(136, 14, 79, 0.45);
+  --shadow-lg: 0 40px 90px -46px rgba(136, 14, 79, 0.5);
+  --shadow-glow: 0 24px 60px -28px rgba(194, 24, 91, 0.6);
+}

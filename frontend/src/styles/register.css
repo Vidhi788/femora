@@ -1,0 +1,99 @@
+/* Extras for the Register page. Everything else reuses your Login styles. */
+
+.step-track {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.step-track span {
+  flex: 1;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(184, 85, 61, 0.18);
+  transition: background 0.3s ease;
+}
+
+.step-track span.is-on {
+  background: linear-gradient(90deg, #e2907c, #b8553d);
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.field-grid .field {
+  min-width: 0;
+}
+
+.bmi-hint {
+  font-weight: 600;
+  color: #b8553d;
+}
+
+.step-actions {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.step-actions .btn-block {
+  flex: 1;
+}
+
+@media (max-width: 520px) {
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step-track span {
+    transition: none;
+  }
+}
+
+/* Password requirements checklist */
+.pw-rules {
+  list-style: none;
+  margin: -4px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 12px;
+  font-size: 0.78rem;
+  color: #8a7a7f;
+}
+
+.pw-rules li {
+  position: relative;
+  padding-left: 18px;
+  transition: color 0.2s ease;
+}
+
+.pw-rules li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.35em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+}
+
+.pw-rules li.is-met {
+  color: #5d8a63;
+}
+
+.pw-rules li.is-met::before {
+  background: currentColor;
+}
+
+@media (max-width: 520px) {
+  .pw-rules {
+    grid-template-columns: 1fr;
+  }
+}
