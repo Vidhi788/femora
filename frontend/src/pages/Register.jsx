@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -45,12 +45,7 @@ function todayIso() {
   return new Date().toLocaleDateString("en-CA");
 }
 
-function Register({
-  onNavigate,
-  onAuthenticated,
-  onAuthenticatedForOnboarding,
-  initialEmail = "",
-}) {
+function Register({ onNavigate, onAuthenticated, initialEmail = "" }) {
   const heroRef = usePointerParallax();
 
   const [step, setStep] = useState(1);
@@ -67,6 +62,9 @@ function Register({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Remember the created account so a retry does not register again (that would give a 409).
+  const accountRef = useRef(null);
+
   // Live BMI preview so the person sees what the dashboard will show.
   const bmi = useMemo(() => {
     const meters = Number(details.heightCm) / 100;
@@ -78,6 +76,8 @@ function Register({
     return (event) => {
       const { value } = event.target;
       setAccount((current) => ({ ...current, [field]: value }));
+      // Editing the account after it was created would be out of sync, so start fresh.
+      accountRef.current = null;
       setError("");
     };
   }
@@ -132,7 +132,7 @@ function Register({
     return "";
   }
 
-  // Step 2: create the account, save the profile, then open the dashboard.
+  // Step 2: create the account, save the profile with the JWT, then open the dashboard.
   async function handleCreate(event) {
     event.preventDefault();
 
@@ -148,26 +148,39 @@ function Register({
     const name = account.name.trim();
     const email = account.email.trim();
 
-    let created;
-
     try {
-      created = await authApi.register({ name, email, password: account.password });
-    } catch (err) {
-      // 409 = the email is already registered, so send them back to fix it.
-      if (err.status === 409) setStep(1);
-      setError(err.message);
-      setLoading(false);
-      return;
-    }
+      // 1. Create the account once and get a JWT.
+      if (!accountRef.current) {
+        const created = await authApi.register({ name, email, password: account.password });
 
-    const user = { userId: created.userId, name, email, remember: true };
+        let userId = created.userId;
+        let token = created.token;
 
-    try {
+        // If register does not return a token, sign in to get one.
+        if (!token) {
+          const session = await authApi.login({ email, password: account.password });
+          token = session.token;
+          userId = userId ?? session.userId;
+        }
+
+        if (!token) {
+          throw new Error("Account created, but we could not sign you in. Please sign in.");
+        }
+
+        accountRef.current = { userId, token };
+      }
+
+      const { userId, token } = accountRef.current;
+
+      // 2. Save the profile WITH the token.
       const response = await fetch(`${API_BASE}/api/profile`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
-          userId: created.userId,
+          userId: Number(userId),
           age: Number(details.age),
           heightCm: Number(details.heightCm),
           weightKg: Number(details.weightKg),
@@ -179,16 +192,19 @@ function Register({
       });
 
       if (!response.ok) {
-        throw new Error("Could not save your details.");
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.message || `Could not save your details (${response.status}).`);
       }
 
-      onAuthenticated(user, "Your account and details are saved.", true);
-    } catch {
-      // The account exists, so fall back to the existing onboarding page.
-      onAuthenticatedForOnboarding(
-        user,
-        "Your account is ready. Please finish your details to continue."
+      // 3. Only now open the dashboard, with the token included.
+      onAuthenticated(
+        { userId, name, email, token, remember: true },
+        "Your account and details are saved."
       );
+    } catch (err) {
+      // 409 = the email is already registered, so send them back to fix it.
+      if (err.status === 409) setStep(1);
+      setError(err.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }

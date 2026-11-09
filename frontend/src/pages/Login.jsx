@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 
 import { ArrowRight, Heart, Leaf, Mail, Sparkles } from "lucide-react";
@@ -52,10 +51,8 @@ function Login({
   onCreateAccount,
   onNavigate,
   onAuthenticated,
-  onAuthenticatedForOnboarding,
   onToast,
   initialEmail = "",
-  newUserEmail = "",
 }) {
   const heroRef = usePointerParallax();
 
@@ -102,7 +99,7 @@ function Login({
     }
 
     if (typeof onNavigate === "function") {
-      onNavigate("register", email);
+      onNavigate("register");
       return;
     }
 
@@ -166,25 +163,11 @@ function Login({
         remember,
       };
 
-      // Identify a newly registered user.
-      const isNewlyRegisteredUser =
-        Boolean(newUserEmail) &&
-        newUserEmail.trim().toLowerCase() ===
-          form.email.trim().toLowerCase();
-
-      if (isNewlyRegisteredUser) {
-        // Newly registered users complete onboarding.
-        onAuthenticatedForOnboarding?.(
-          loggedInUser,
-          "Complete your profile to personalize Femora."
-        );
-      } else {
-        // Existing users go directly to dashboard.
-        onAuthenticated(
-          loggedInUser,
-          data.message || "You are signed in."
-        );
-      }
+      // Everyone goes straight to the dashboard.
+      onAuthenticated(
+        loggedInUser,
+        data.message || "You are signed in."
+      );
     } catch (error) {
       const offline = error instanceof TypeError;
 

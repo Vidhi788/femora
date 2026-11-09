@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 
-import Onboarding from "./pages/Onboarding.jsx";
 import Toast from "./components/Toast.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Login from "./pages/Login.jsx";
@@ -25,22 +24,17 @@ import { apiFetch } from "./api/http.js";
 import "./styles/auth.css";
 
 const STORAGE_KEY = "femoraUser";
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8080";
+const API_BASE =
+  import.meta.env.VITE_API_URL || "http://localhost:8080";
 
-const LIGHT_ONLY_PAGES = [
-  "login",
-  "register",
-  "onboarding",
-];
+const LIGHT_ONLY_PAGES = ["login", "register"];
 
 // Read saved user session.
 function readStoredUser() {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
 
-    if (!raw) {
-      return null;
-    }
+    if (!raw) return null;
 
     const parsed = JSON.parse(raw);
 
@@ -55,14 +49,10 @@ function readStoredUser() {
 function App() {
   const [user, setUser] = useState(readStoredUser);
 
-  // Check the user's profile before opening the dashboard.
-  const [page, setPage] = useState(() => {
-    return readStoredUser()?.userId
-      ? "checking"
-      : "login";
-  });
+  const [page, setPage] = useState(() =>
+    readStoredUser()?.userId ? "checking" : "login"
+  );
 
-  const [pendingEmail, setPendingEmail] = useState("");
   const [toast, setToast] = useState(null);
 
   // Toast notification.
@@ -77,7 +67,7 @@ function App() {
     setToast(null);
   }, []);
 
-  // Check saved user's profile when the app opens.
+  // Check saved user profile when the app opens.
   useEffect(() => {
     if (page !== "checking" || !user?.userId) {
       return undefined;
@@ -90,19 +80,15 @@ function App() {
         user.userId
       )}`
     )
-      .then((response) => {
-        if (cancelled) {
-          return;
-        }
+      .then(() => {
+        if (cancelled) return;
 
-        if (response.status === 404) {
-          setPage("onboarding");
-        } else {
-          setPage("dashboard");
-        }
+        // Let the dashboard handle a missing profile.
+        setPage("dashboard");
       })
       .catch(() => {
-        // If backend is unavailable, let Dashboard handle retrying.
+        // Keep the user in the dashboard if the backend
+        // is unavailable so existing dashboard retry logic works.
         if (!cancelled) {
           setPage("dashboard");
         }
@@ -118,24 +104,23 @@ function App() {
     const lightOnly =
       !user || LIGHT_ONLY_PAGES.includes(page);
 
-    applyTheme(
-      lightOnly ? "light" : getStoredTheme()
-    );
+    applyTheme(lightOnly ? "light" : getStoredTheme());
   }, [page, user]);
 
   // Start selected pages at the top.
   useEffect(() => {
     if (
-      page.indexOf("yoga") === 0 ||
-      page === "pcos" ||
-      page === "pregnancy" ||
-      page === "general" ||
-      page === "backpain" ||
-      page === "products" ||
-      page === "doctors" ||
-      page === "settings" ||
-      page === "help" ||
-      page === "onboarding"
+      page.startsWith("yoga") ||
+      [
+        "pcos",
+        "pregnancy",
+        "general",
+        "backpain",
+        "products",
+        "doctors",
+        "settings",
+        "help",
+      ].includes(page)
     ) {
       window.scrollTo({ top: 0 });
     }
@@ -151,7 +136,6 @@ function App() {
       }
 
       setUser(null);
-      setPendingEmail("");
       setPage("login");
 
       showToast({
@@ -174,34 +158,8 @@ function App() {
     };
   }, [showToast]);
 
-  // Existing user successfully logged in.
+  // Save authenticated user and open dashboard.
   function handleAuthenticated(nextUser, message) {
-    try {
-      window.localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(nextUser)
-      );
-    } catch {
-      // Session will still work if localStorage is unavailable.
-    }
-
-    setUser(nextUser);
-    setPendingEmail("");
-    setPage("dashboard");
-
-    showToast({
-      tone: "good",
-      title: `Welcome back, ${nextUser.name || "friend"}`,
-      message:
-        message || "Your wellness space is ready.",
-    });
-  }
-
-  // Newly registered user goes to onboarding.
-  function handleAuthenticatedForOnboarding(
-    nextUser,
-    message
-  ) {
     try {
       window.localStorage.setItem(
         STORAGE_KEY,
@@ -212,22 +170,13 @@ function App() {
     }
 
     setUser(nextUser);
-    setPendingEmail("");
-    setPage("onboarding");
+    setPage("dashboard");
 
     showToast({
-      tone: "info",
-      title: "One last step",
-      message:
-        message ||
-        "Complete your profile to personalize Femora.",
+      tone: "good",
+      title: `Welcome, ${nextUser.name || "friend"}`,
+      message: message || "Your Femora dashboard is ready.",
     });
-  }
-
-  // Registration completed without a token.
-  function handleRegistered(email) {
-    setPendingEmail(email);
-    setPage("login");
   }
 
   // Logout.
@@ -239,7 +188,6 @@ function App() {
     }
 
     setUser(null);
-    setPendingEmail("");
     setPage("login");
 
     showToast({
@@ -249,59 +197,39 @@ function App() {
     });
   }
 
-  // Onboarding completed.
-  function handleOnboardingComplete() {
-    setPage("dashboard");
-
-    showToast({
-      tone: "good",
-      title: "Your profile is ready",
-      message:
-        "Your Femora dashboard has been personalized.",
-    });
-  }
-
-  // Redirect users to onboarding if their profile is missing.
+  // If a page detects a missing profile, return to dashboard.
   const handleProfileMissing = useCallback(() => {
-    setPage("onboarding");
+    setPage("dashboard");
   }, []);
 
   // Navigation functions.
-  const openYoga = useCallback(() => {
-    setPage("yoga");
-  }, []);
-
-  const openPcos = useCallback(() => {
-    setPage("pcos");
-  }, []);
-
-  const openPregnancy = useCallback(() => {
-    setPage("pregnancy");
-  }, []);
-
-  const openGeneral = useCallback(() => {
-    setPage("general");
-  }, []);
-
-  const openBackPain = useCallback(() => {
-    setPage("backpain");
-  }, []);
-
-  const openProducts = useCallback(() => {
-    setPage("products");
-  }, []);
-
-  const openDoctors = useCallback(() => {
-    setPage("doctors");
-  }, []);
-
-  const openSettings = useCallback(() => {
-    setPage("settings");
-  }, []);
-
-  const openHelp = useCallback(() => {
-    setPage("help");
-  }, []);
+  const openYoga = useCallback(() => setPage("yoga"), []);
+  const openPcos = useCallback(() => setPage("pcos"), []);
+  const openPregnancy = useCallback(
+    () => setPage("pregnancy"),
+    []
+  );
+  const openGeneral = useCallback(
+    () => setPage("general"),
+    []
+  );
+  const openBackPain = useCallback(
+    () => setPage("backpain"),
+    []
+  );
+  const openProducts = useCallback(
+    () => setPage("products"),
+    []
+  );
+  const openDoctors = useCallback(
+    () => setPage("doctors"),
+    []
+  );
+  const openSettings = useCallback(
+    () => setPage("settings"),
+    []
+  );
+  const openHelp = useCallback(() => setPage("help"), []);
 
   return (
     <>
@@ -309,11 +237,7 @@ function App() {
         <Register
           key="register"
           onNavigate={setPage}
-          onRegistered={handleRegistered}
           onAuthenticated={handleAuthenticated}
-          onAuthenticatedForOnboarding={
-            handleAuthenticatedForOnboarding
-          }
           onToast={showToast}
         />
       ) : page === "checking" && user ? (
@@ -328,13 +252,6 @@ function App() {
         >
           <p>Loading your space...</p>
         </main>
-      ) : page === "onboarding" && user ? (
-        <Onboarding
-          key="onboarding"
-          user={user}
-          onToast={showToast}
-          onComplete={handleOnboardingComplete}
-        />
       ) : page === "pcos" && user ? (
         <PcosChecker
           key="pcos"
@@ -394,10 +311,7 @@ function App() {
           onBack={() => setPage("dashboard")}
         />
       ) : page === "yoga" && user ? (
-        <Yoga
-          key="yoga"
-          onNavigate={setPage}
-        />
+        <Yoga key="yoga" onNavigate={setPage} />
       ) : page === "yoga-period-pain" && user ? (
         <PeriodPainYoga
           key="yoga-period-pain"
@@ -440,12 +354,7 @@ function App() {
           key="login"
           onNavigate={setPage}
           onAuthenticated={handleAuthenticated}
-          onAuthenticatedForOnboarding={
-            handleAuthenticatedForOnboarding
-          }
           onToast={showToast}
-          initialEmail={pendingEmail}
-          newUserEmail={pendingEmail}
         />
       )}
 
