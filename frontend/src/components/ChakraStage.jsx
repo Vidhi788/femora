@@ -1,4 +1,4 @@
-import chakraBg from "../assets/chakra-bg (1).png";
+import chakraBg from "../assets/chakra-bg.png";
 import "../styles/yoga.css";
 
 export default function ChakraStage({ side = false }) {
