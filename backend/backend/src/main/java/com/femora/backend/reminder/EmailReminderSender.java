@@ -11,7 +11,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
 /**
- * Sends reminders by email, using the same Gmail settings as the password reset code.
+ * Sends reminders by email, using the same SMTP settings as the password reset code.
+ * The sender address comes from femora.mail.from, which must be a sender verified in Brevo.
  * When a calendar file is given it is attached, so one tap adds the reminder to the
  * phone's calendar app.
  */
@@ -23,7 +24,7 @@ public class EmailReminderSender implements ReminderSender {
     private final String fromName;
 
     public EmailReminderSender(ObjectProvider<JavaMailSender> mailSender,
-                               @Value("${spring.mail.username:}") String from,
+                               @Value("${femora.mail.from:femoraadmin@gmail.com}") String from,
                                @Value("${femora.mail.from-name:Femora}") String fromName) {
         this.mailSender = mailSender;
         this.from = from;
