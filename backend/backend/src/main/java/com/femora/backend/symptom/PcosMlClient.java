@@ -57,7 +57,7 @@ public class PcosMlClient {
     public double predict(Map<String, Object> answers) {
         try {
             Map<String, Object> body = client.post()
-                    .uri("/predict")
+                    .uri("/pcos/predict")
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(answers)
                     .retrieve()
