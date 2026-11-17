@@ -97,3 +97,40 @@
     grid-template-columns: 1fr;
   }
 }
+/* Email verification (OTP) screen */
+.otp-note {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: #8a7a7f;
+}
+
+.otp-note strong {
+  color: #3a2430;
+  word-break: break-all;
+}
+
+.otp-input {
+  letter-spacing: 0.45em;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.otp-input::placeholder {
+  letter-spacing: 0.45em;
+  font-weight: 400;
+  opacity: 0.45;
+}
+
+.otp-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: -4px;
+}
+
+.otp-links .text-link:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}

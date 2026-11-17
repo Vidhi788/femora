@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Sends the reset code by email. It sends in the background so the reply time does not reveal
+ * Sends codes by email in the background, so the reply time does not reveal
  * whether an email address has an account.
  *
  * The sender shows up in the inbox as "Femora" (femora.mail.from-name). The address comes from
@@ -47,7 +47,25 @@ public class EmailService {
         if (logCode) {
             log.warn("DEV ONLY - password reset code for {} is {}", to, code);
         }
+        sendAsync(to, "Your Femora password reset code",
+                "Your Femora code is " + code + ".\n\n"
+                        + "It expires in 10 minutes. If you did not ask to reset your password, "
+                        + "you can ignore this email and your password will stay the same.\n\n"
+                        + "Femora is an academic healthcare project.");
+    }
 
+    public void sendVerificationCode(String to, String code) {
+        if (logCode) {
+            log.warn("DEV ONLY - email verification code for {} is {}", to, code);
+        }
+        sendAsync(to, "Your Femora verification code",
+                "Your Femora verification code is " + code + ".\n\n"
+                        + "It expires in 10 minutes. If you did not try to create a Femora account, "
+                        + "you can ignore this email.\n\n"
+                        + "Femora is an academic healthcare project.");
+    }
+
+    private void sendAsync(String to, String subject, String text) {
         JavaMailSender sender = mailSender.getIfAvailable();
         if (sender == null || from.isBlank()) {
             log.warn("Mail is not configured, so no email was sent.");
@@ -61,15 +79,12 @@ public class EmailService {
 
                 helper.setFrom(new InternetAddress(from, fromName, "UTF-8"));
                 helper.setTo(to);
-                helper.setSubject("Your Femora password reset code");
-                helper.setText("Your Femora code is " + code + ".\n\n"
-                        + "It expires in 10 minutes. If you did not ask to reset your password, "
-                        + "you can ignore this email and your password will stay the same.\n\n"
-                        + "Femora is an academic healthcare project.", false);
+                helper.setSubject(subject);
+                helper.setText(text, false);
 
                 sender.send(message);
             } catch (Exception e) {
-                log.warn("Could not send the reset email: {}", e.getMessage());
+                log.warn("Could not send email: {}", e.getMessage());
             }
         });
     }

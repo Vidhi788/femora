@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -8,6 +8,7 @@ import {
   Mail,
   Ruler,
   Scale,
+  ShieldCheck,
   Sparkles,
   User,
 } from "lucide-react";
@@ -45,6 +46,32 @@ function todayIso() {
   return new Date().toLocaleDateString("en-CA");
 }
 
+// Calls the email verification endpoints (/request and /verify).
+async function otpCall(path, body) {
+  const response = await fetch(`${API_BASE}/api/auth/email-otp/${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    const error = new Error(data.error || data.message || "Something went wrong. Please try again.");
+    error.status = response.status;
+    throw error;
+  }
+
+  return data;
+}
+
+// A thrown error without a status means the server could not be reached at all.
+function friendlyError(err) {
+  return err.status
+    ? err.message
+    : "We could not reach the server. It may be waking up, so please try again in a moment.";
+}
+
 function Register({ onNavigate, onAuthenticated, initialEmail = "" }) {
   const heroRef = usePointerParallax();
 
@@ -62,8 +89,23 @@ function Register({ onNavigate, onAuthenticated, initialEmail = "" }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Email verification (shown inside step 1, between "Continue" and step 2)
+  const [verifying, setVerifying] = useState(false); // true while the code screen is showing
+  const [code, setCode] = useState("");
+  const [verifiedEmail, setVerifiedEmail] = useState(""); // the email that passed verification
+  const [cooldown, setCooldown] = useState(0); // seconds until "Resend" is allowed
+
   // Remember the created account so a retry does not register again (that would give a 409).
   const accountRef = useRef(null);
+
+  const normalizedEmail = account.email.trim().toLowerCase();
+
+  // Resend countdown
+  useEffect(() => {
+    if (cooldown <= 0) return undefined;
+    const timer = setTimeout(() => setCooldown((seconds) => seconds - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [cooldown]);
 
   // Live BMI preview so the person sees what the dashboard will show.
   const bmi = useMemo(() => {
@@ -90,8 +132,8 @@ function Register({ onNavigate, onAuthenticated, initialEmail = "" }) {
     };
   }
 
-  // Step 1 -> step 2 (nothing is saved yet)
-  function handleNext(event) {
+  // Step 1 -> email a code (or skip straight to step 2 if this email is already verified)
+  async function handleNext(event) {
     event.preventDefault();
 
     if (!account.name.trim() || !account.email.trim() || !account.password) {
@@ -112,7 +154,73 @@ function Register({ onNavigate, onAuthenticated, initialEmail = "" }) {
     }
 
     setError("");
-    setStep(2);
+
+    // Already verified earlier (for example they pressed Back from step 2)
+    if (verifiedEmail === normalizedEmail) {
+      setStep(2);
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await otpCall("request", { email: normalizedEmail });
+      setCode("");
+      setCooldown(60);
+      setVerifying(true);
+    } catch (err) {
+      setError(friendlyError(err));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Code screen -> step 2
+  async function handleVerify(event) {
+    event.preventDefault();
+
+    if (code.length !== 6) {
+      setError("Enter the 6-digit code from your email.");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      await otpCall("verify", { email: normalizedEmail, code });
+      setVerifiedEmail(normalizedEmail);
+      setVerifying(false);
+      setCode("");
+      setStep(2);
+    } catch (err) {
+      setError(friendlyError(err));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleResend() {
+    if (cooldown > 0 || loading) return;
+
+    setLoading(true);
+    setError("");
+
+    try {
+      await otpCall("request", { email: normalizedEmail });
+      setCode("");
+      setCooldown(60);
+    } catch (err) {
+      setError(friendlyError(err));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function handleChangeEmail() {
+    setVerifying(false);
+    setCode("");
+    setError("");
   }
 
   function validateDetails() {
@@ -146,7 +254,7 @@ function Register({ onNavigate, onAuthenticated, initialEmail = "" }) {
     setError("");
 
     const name = account.name.trim();
-    const email = account.email.trim();
+    const email = normalizedEmail;
 
     try {
       // 1. Create the account once and get a JWT.
@@ -202,12 +310,37 @@ function Register({ onNavigate, onAuthenticated, initialEmail = "" }) {
         "Your account and details are saved."
       );
     } catch (err) {
+      // 403 = the email verification expired (30 minutes) or is missing, so verify again.
+      if (err.status === 403) {
+        setVerifiedEmail("");
+        setStep(1);
+        setError("Your email verification has expired. Please verify your email again.");
+        return;
+      }
+
       // 409 = the email is already registered, so send them back to fix it.
       if (err.status === 409) setStep(1);
       setError(err.message || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
+  }
+
+  // Which form handler and text to use right now
+  const onSubmit = step === 2 ? handleCreate : verifying ? handleVerify : handleNext;
+
+  let title = "Tell us about you";
+  let subtitle = "These details fill in your dashboard and your cycle predictions.";
+  let buttonText = loading ? "Creating your space..." : "Create account";
+
+  if (step === 1 && !verifying) {
+    title = "Create your account";
+    subtitle = "Your name, email and a password.";
+    buttonText = loading ? "Sending code..." : "Continue";
+  } else if (step === 1 && verifying) {
+    title = "Verify your email";
+    subtitle = "This makes sure the address is really yours.";
+    buttonText = loading ? "Verifying..." : "Verify & continue";
   }
 
   return (
@@ -279,20 +412,12 @@ function Register({ onNavigate, onAuthenticated, initialEmail = "" }) {
 
           <p className="eyebrow eyebrow-plain">{step === 1 ? "Step 1 of 2" : "Step 2 of 2"}</p>
 
-          <h2 className="form-title">{step === 1 ? "Create your account" : "Tell us about you"}</h2>
+          <h2 className="form-title">{title}</h2>
 
-          <p className="form-subtitle">
-            {step === 1
-              ? "Your name, email and a password."
-              : "These details fill in your dashboard and your cycle predictions."}
-          </p>
+          <p className="form-subtitle">{subtitle}</p>
 
-          <form
-            className="form-body"
-            onSubmit={step === 1 ? handleNext : handleCreate}
-            noValidate
-          >
-            {step === 1 ? (
+          <form className="form-body" onSubmit={onSubmit} noValidate>
+            {step === 1 && !verifying ? (
               <>
                 <div className="field">
                   <label htmlFor="reg-name">Full name</label>
@@ -345,7 +470,60 @@ function Register({ onNavigate, onAuthenticated, initialEmail = "" }) {
                   ))}
                 </ul>
               </>
-            ) : (
+            ) : null}
+
+            {step === 1 && verifying ? (
+              <>
+                <p className="otp-note">
+                  We sent a 6-digit code to <strong>{normalizedEmail}</strong>. It expires in 10
+                  minutes. If you do not see it, check your spam folder.
+                </p>
+
+                <div className="field">
+                  <label htmlFor="reg-otp">Verification code</label>
+                  <div className="input-wrap">
+                    <ShieldCheck className="field-icon" size={18} aria-hidden="true" />
+                    <input
+                      id="reg-otp"
+                      className="otp-input"
+                      type="text"
+                      inputMode="numeric"
+                      autoComplete="one-time-code"
+                      maxLength={6}
+                      placeholder="000000"
+                      autoFocus
+                      value={code}
+                      onChange={(event) => {
+                        setCode(event.target.value.replace(/\D/g, "").slice(0, 6));
+                        setError("");
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div className="otp-links">
+                  <button
+                    type="button"
+                    className="text-link"
+                    onClick={handleResend}
+                    disabled={cooldown > 0 || loading}
+                  >
+                    {cooldown > 0 ? `Resend code in ${cooldown}s` : "Resend code"}
+                  </button>
+
+                  <button
+                    type="button"
+                    className="text-link"
+                    onClick={handleChangeEmail}
+                    disabled={loading}
+                  >
+                    Change email
+                  </button>
+                </div>
+              </>
+            ) : null}
+
+            {step === 2 ? (
               <>
                 <div className="field-grid">
                   <div className="field">
@@ -456,7 +634,7 @@ function Register({ onNavigate, onAuthenticated, initialEmail = "" }) {
                   <span>My cycles are usually regular</span>
                 </label>
               </>
-            )}
+            ) : null}
 
             {error ? (
               <p className="form-message" role="alert">
@@ -480,11 +658,13 @@ function Register({ onNavigate, onAuthenticated, initialEmail = "" }) {
                 </button>
               ) : null}
 
-              <button type="submit" className="btn btn-primary btn-shine btn-block" disabled={loading}>
+              <button
+                type="submit"
+                className="btn btn-primary btn-shine btn-block"
+                disabled={loading || (verifying && step === 1 && code.length !== 6)}
+              >
                 {loading ? <span className="spinner" aria-hidden="true" /> : null}
-                <span className="btn-label">
-                  {step === 1 ? "Continue" : loading ? "Creating your space..." : "Create account"}
-                </span>
+                <span className="btn-label">{buttonText}</span>
                 {loading ? null : (
                   <span className="btn-arrow" aria-hidden="true">
                     <ArrowRight size={18} />

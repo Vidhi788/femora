@@ -1,5 +1,6 @@
 package com.femora.backend.controller;
 
+import com.femora.backend.emailverification.EmailVerificationService;
 import com.femora.backend.entity.User;
 import com.femora.backend.repository.UserRepository;
 import com.femora.backend.security.JwtService;
@@ -11,31 +12,40 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/auth" )
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final EmailVerificationService emailVerificationService;
 
     public AuthController(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
-            JwtService jwtService
+            JwtService jwtService,
+            EmailVerificationService emailVerificationService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.emailVerificationService = emailVerificationService;
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
 
-        if (userRepository.existsByEmail(user.getEmail())) {
+        String email = user.getEmail() == null ? "" : user.getEmail().trim().toLowerCase();
+        user.setEmail(email);
+
+        if (userRepository.existsByEmail(email)) {
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
                     .body(Map.of("message", "Email already exists"));
         }
+
+        // Blocks the account unless this email passed the OTP step (throws 403 otherwise).
+        emailVerificationService.consumeVerification(email);
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User savedUser = userRepository.save(user);
@@ -51,8 +61,11 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User loginUser) {
 
-        User existingUser = userRepository
-                .findByEmail(loginUser.getEmail())
+        String rawEmail = loginUser.getEmail() == null ? "" : loginUser.getEmail().trim();
+
+        // New accounts are stored in lowercase; older ones may not be, so try both.
+        User existingUser = userRepository.findByEmail(rawEmail)
+                .or(() -> userRepository.findByEmail(rawEmail.toLowerCase()))
                 .orElse(null);
 
         if (existingUser == null ||
